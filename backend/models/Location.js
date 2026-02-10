@@ -1,35 +1,35 @@
-import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/db.js';
+import mongoose from 'mongoose';
 
-const Location = sequelize.define('Location', {
-  id: {
-    type: DataTypes.BIGINT,
-    autoIncrement: true,
-    primaryKey: true,
+const locationSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: String,
+      required: true,
+    },
+    latitude: {
+      type: Number,
+      required: true,
+    },
+    longitude: {
+      type: Number,
+      required: true,
+    },
+    shareId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    isShared: {
+      type: Boolean,
+      default: false,
+    },
+    expiresAt: Date,
   },
-  userId: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  latitude: {
-    type: DataTypes.DOUBLE,
-    allowNull: false,
-  },
-  longitude: {
-    type: DataTypes.DOUBLE,
-    allowNull: false,
-  },
-  shareId: {
-    type: DataTypes.STRING,
-    unique: true,
-  },
-  isShared: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
-  expiresAt: DataTypes.DATE,
-}, {
-  timestamps: true,
-});
+  {
+    timestamps: true,
+  }
+);
+
+const Location = mongoose.model('Location', locationSchema);
 
 export default Location;

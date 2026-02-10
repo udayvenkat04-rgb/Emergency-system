@@ -1,26 +1,16 @@
-import { Sequelize } from 'sequelize';
+import mongoose from 'mongoose';
 
-const mysqlUrl = process.env.MYSQL_URL || (() => {
-  const user = process.env.DB_USER || 'root';
-  const pass = process.env.DB_PASS || 'password';
-  const host = process.env.DB_HOST || '127.0.0.1';
-  const port = process.env.DB_PORT || '3306';
-  const db = process.env.DB_NAME || 'emergency_system';
-  return `mysql://${user}:${pass}@${host}:${port}/${db}`;
-})();
-
-export const sequelize = new Sequelize(mysqlUrl, {
-  dialect: 'mysql',
-  logging: false,
-});
+const mongodbUrl = process.env.MONGODB_URI || 'mongodb://localhost:27017/emergency_system';
 
 export const connectDB = async () => {
   try {
-    await sequelize.authenticate();
-    await sequelize.sync();
-    console.log('MySQL connected successfully');
+    await mongoose.connect(mongodbUrl, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('MongoDB connected successfully');
   } catch (error) {
-    console.error('MySQL connection error:', error.message);
+    console.error('MongoDB connection error:', error.message);
     process.exit(1);
   }
 };
